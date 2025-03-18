@@ -12,14 +12,42 @@ const ColorChange = () => {
     const [isPlaying, setIsPlaying]=useState(false)
     const intervalRef = useRef(null)
 
-    console.log(bgColor)
+    const startBgChange = () => {
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
+                setBgColor(getRandomColor())
+            }, 2000)
+
+            setIsPlaying(true)
+        }
+    }
+
+    const stopBgChange = () => {
+        if(intervalRef.current){
+            clearInterval(intervalRef.current)
+            intervalRef.current=null
+            setIsPlaying(false)
+        }
+    }
 
     return (
         <div className='bg-container' style={{backgroundColor:bgColor}}>
-            <h1 className='color-code'>color code</h1>
+            <h1 className='color-code'>{bgColor.toUpperCase()}</h1>
             <div className="botton-group">
-                <button className="control-button">play</button>
-                <button className="control-button">stop</button>
+                <button 
+                onClick={startBgChange}
+                className="control-button"
+                disabled={isPlaying}
+                >
+                    play
+                    </button>
+                <button 
+                    onClick={stopBgChange}
+                    disabled={!isPlaying}
+                    className="control-button"
+                >
+                    stop
+                </button>
             </div>
         </div>
     )
